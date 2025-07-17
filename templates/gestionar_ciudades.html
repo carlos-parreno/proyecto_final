@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Gestionar Ciudades{% endblock %}
+
+{% block content %}
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Gestionar Ciudades</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Añadir Nueva Ciudad</h3>
+          </div>
+          <form action="{{ url_for('ciudades.gestionar_ciudades') }}" method="POST">
+            <div class="card-body">
+              <div class="form-group">
+                <label for="nombre_ciudad">Nombre de la Nueva Ciudad</label>
+                <input type="text" class="form-control" name="nombre_ciudad" placeholder="Ej: Ambato" required>
+              </div>
+              <hr>
+              <div class="form-group">
+                <label>Conectar con (y especificar distancia):</label>
+                {% for ciudad in ciudades_existentes %}
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name="conexiones_check" value="{{ ciudad }}">
+                        </div>
+                    </div>
+                    <div class="form-control" style="background-color: #e9ecef;">{{ ciudad }}</div>
+                    <input type="number" class="form-control" name="distancia_{{ ciudad }}" placeholder="Distancia">
+                </div>
+                {% else %}
+                <p>No hay ciudades existentes para conectar.</p>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Añadir Ciudad</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-7">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Ciudades Actuales en el Grafo</h3>
+          </div>
+          <div class="card-body p-0">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 10px">#</th>
+                  <th>Ciudad</th>
+                  <th style="width: 40px">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ciudad in ciudades_existentes %}
+                <tr>
+                  <td>{{ loop.index }}.</td>
+                  <td>{{ ciudad }}</td>
+                  <td>
+                    <form action="{{ url_for('ciudades.eliminar_ciudad', nombre_ciudad=ciudad) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar {{ ciudad }}?');">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                  </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">No hay ciudades en el grafo.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

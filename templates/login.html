@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar Sesión</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/plugins/fontawesome-free/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/dist/css/adminlte.min.css') }}">
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="#"><b>Proyecto</b>Grafos</a>
+  </div>
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Inicia sesión para comenzar</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+      <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="input-group mb-3">
+            {{ form.username(class="form-control", placeholder="Usuario") }}
+            <div class="input-group-append"><div class="input-group-text"><span class="fas fa-user"></span></div></div>
+        </div>
+        <div class="input-group mb-3">
+            {{ form.password(class="form-control", placeholder="Contraseña") }}
+            <div class="input-group-append"><div class="input-group-text"><span class="fas fa-lock"></span></div></div>
+        </div>
+        <div class="row">
+          <div class="col-7"> <div class="icheck-primary">
+                {{ form.remember_me() }}
+                {{ form.remember_me.label }}
+            </div>
+          </div>
+          <div class="col-5"> {{ form.submit(class="btn btn-primary btn-block") }}
+          </div>
+        </div>
+        </div>
+      </form>
+      <p class="mb-0">
+        <a href="{{ url_for('auth.register') }}" class="text-center">Registrar un nuevo usuario</a>
+      </p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

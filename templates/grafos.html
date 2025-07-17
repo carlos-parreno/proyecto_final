@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Calculadora de Rutas{% endblock %}
+
+{% block content %}
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Análisis de Ruta Óptima</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Selecciona tu Ruta</h3>
+                </div>
+                <form action="{{ url_for('grafos.ruta_grafos') }}" method="GET">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="origen">Ciudad de Origen</label>
+                                    <select class="form-control" name="origen" id="origen">
+                                        {% for ciudad in ciudades %}
+                                            <option value="{{ ciudad }}" {% if ciudad == origen_seleccionado %}selected{% endif %}>{{ ciudad }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="destino">Ciudad de Destino</label>
+                                    <select class="form-control" name="destino" id="destino">
+                                        {% for ciudad in ciudades %}
+                                            <option value="{{ ciudad }}" {% if ciudad == destino_seleccionado %}selected{% endif %}>{{ ciudad }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">Calcular Ruta</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger text-center">
+        <h4><i class="icon fas fa-ban"></i> Error</h4>
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% if camino %}
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card card-primary card-outline">
+          <div class="card-header">
+            <h5 class="m-0">Resultados del Cálculo</h5>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title"><strong>Camino más económico:</strong></h6>
+            <p class="card-text">{{ " &rarr; ".join(camino) | safe }}</p>
+
+            <h6 class="card-title"><strong>Costo Total:</strong></h6>
+            <p class="card-text">{{ costo }} unidades</p>
+            
+            <hr>
+
+            <p class="card-text">{{ mensaje_costera }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="m-0">Visualización del Grafo</h5>
+          </div>
+          <div class="card-body text-center">
+            <img src="{{ url_for('static', filename=ruta_imagen) }}" alt="Grafo de la ruta" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
